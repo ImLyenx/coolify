@@ -35,6 +35,8 @@ services:
 
   unsend:
     image: unsend/unsend:latest
+    ports:
+      - ${PORT:-3000}:${PORT:-3000}
     environment:
       - SERVICE_FQDN_UNSEND_3000
       - DATABASE_URL=postgresql://${SERVICE_USER_POSTGRES}:${SERVICE_PASSWORD_POSTGRES}@postgres:5432/${SERVICE_DB_POSTGRES:-unsend}
@@ -54,7 +56,7 @@ services:
       redis:
         condition: service_healthy
     healthcheck:
-      test: [ "CMD-SHELL", "wget -qO- http://127.0.0.1:3000 || exit 1" ]
+      test: ["CMD-SHELL", "wget -qO- http://unsend:3000 || exit 1"]
       interval: 5s
       retries: 10
       timeout: 2s
